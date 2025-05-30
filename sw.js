@@ -1,4 +1,4 @@
-const CACHE_NAME = 'creaite-cache-v0.1'; // НЕ ЗАБЫВАЕМ ОБНОВЛЯТЬ ХЭШ
+const CACHE_NAME = 'creaite-cache-v0.2'; // НЕ ЗАБЫВАЕМ ОБНОВЛЯТЬ ХЭШ
 
 self.addEventListener('install', e => {
   e.waitUntil(
