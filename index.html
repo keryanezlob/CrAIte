@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#FFFFFF" />
+  <title>creAIte</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon-192.png" type="image/png" />
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').then(() => {
+        console.log("✅ Service Worker зареєстрований");
+      }).catch(error => {
+        console.error("❌ Помилка реєстрації Service Worker:", error);
+      });
+    }
+  </script>
+  <style>
+    /* Базовые стили для светлой темы по умолчанию */
+    :root { /* Переменные для цветов */
+      --background-color: #FFFFFF;
+      --text-color: #000000;
+    }
+
+    /* Стили для темной темы */
+    html[data-theme="dark"] {
+      --background-color: #000000;
+      --text-color: #FFFFFF;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%; /* Изменено на min-height для прокрутки */
+      /* overflow: hidden; - удалено, чтобы контент мог расширяться */
+      display: flex;
+      flex-direction: column;
+      /* justify-content: center; - удалено, если контента будет много */
+      /* align-items: center; - удалено, если контента будет много */
+      font-family: sans-serif; /* Изменено с monospace на более универсальный */
+      font-size: 16px; /* Базовый размер шрифта, можно настроить */
+      
+      background-color: var(--background-color);
+      color: var(--text-color);
+      transition: background-color 0.3s ease, color 0.3s ease; /* Плавный переход */
+    }
+
+    /* Стили для кнопки-иконки темы */
+    #theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 10px;
+      cursor: pointer;
+      background-color: transparent;
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background-color 0.2s ease;
+      z-index: 100;
+    }
+
+    #theme-toggle:hover {
+        background-color: rgba(128, 128, 128, 0.2);
+    }
+
+    #theme-toggle img { /* Стили для изображения внутри кнопки */
+      width: 24px;
+      height: 24px;
+      object-fit: contain; /* Чтобы изображение не обрезалось */
+      transition: opacity 0.3s ease; /* Плавное появление/исчезновение */
+    }
+    
+    /* Стили для скрытия одной из иконок */
+    #theme-icon-sun.hidden,
+    #theme-icon-moon.hidden {
+        display: none;
+    }
+
+    /* #clock - удалено, т.к. "creAIte" не обязательно часы, или может быть переосмыслено */
+    /* Если блок с id="clock" будет использоваться для другого контента, его стили нужно будет определить здесь */
+    .content-area { /* Новый общий класс для контента */
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 20px 20px 20px; /* Добавим отступ сверху из-за кнопки */
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.2em;
+      max-width: 800px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <button id="theme-toggle" aria-label="Переключить тему">
+    <img id="theme-icon-moon" src="icon-moon.png" alt="Темная тема">
+    <img id="theme-icon-sun" src="icon-sun.png" alt="Светлая тема" class="hidden">
+  </button>
+  <div class="content-area">
+    <h1>Добро пожаловать в creAIte!</h1>
+    <p>Здесь вы можете создавать что-то новое с помощью искусственного интеллекта.</p>
+    <p>Это ваша отправная точка для инноваций!</p>
+    </div>
+  <script src="theme.js"></script>
+</body>
+</html>
