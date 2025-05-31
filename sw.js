@@ -1,9 +1,9 @@
-const CACHE_NAME = 'creaite-cache-v0.1.0.0.2'; // НЕ ЗАБЫВАЕМ ОБНОВЛЯТЬ ХЭШ
+const CACHE_NAME = 'creaite-cache-v1.0.0.3'; // НЕ ЗАБЫВАЕМ ОБНОВЛЯТЬ ХЭШ
 
 self.addEventListener('install', e => {
+  console.log('📦 Кэширование основных ресурсов для creAIte...');
   e.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      console.log('📦 Кэширование основных ресурсов для creAIte...');
       return cache.addAll([
         '.',
         'index.html',
@@ -11,16 +11,18 @@ self.addEventListener('install', e => {
         'icon-192.png',
         'icon-512.png',
         'theme.js',
-        'icon-moon.png', // Убедимся, что иконки тоже кэшируются
-        'icon-sun.png'   // Убедимся, что иконки тоже кэшируются
+        'icon-moon.png',
+        'icon-sun.png'
       ]);
-    }).catch(error => {
+    }).then(() => self.skipWaiting()) // <-- ДОБАВИТЬ ЭТУ СТРОКУ
+    .catch(error => {
       console.error('❌ Ошибка при кэшировании:', error);
     })
   );
 });
 
 self.addEventListener('activate', e => {
+  console.log('🔄 Активация Service Worker...');
   e.waitUntil(
     caches.keys().then(keys => {
       return Promise.all(
@@ -30,7 +32,8 @@ self.addEventListener('activate', e => {
               return caches.delete(k);
             })
       );
-    }).catch(error => {
+    }).then(() => self.clients.claim()) // <-- И ЭТУ СТРОКУ
+    .catch(error => {
       console.error('❌ Ошибка при активации Service Worker:', error);
     })
   );
