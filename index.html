@@ -12,14 +12,20 @@
       navigator.serviceWorker.register('sw.js').then(reg => {
         console.log("✅ Service Worker зареєстрований");
 
-        // Дополнительная логика для обнаружения обновлений
+        // --- НОВЫЙ КОД ЗДЕСЬ ---
+        // Проверяем, есть ли уже ожидающий Service Worker при загрузке страницы
+        if (reg.waiting) {
+            console.log('💡 Service Worker: Найдена ожидающая версия при загрузке страницы.');
+            document.dispatchEvent(new CustomEvent('swUpdateReady', { detail: reg.waiting }));
+        }
+        // --- КОНЕЦ НОВОГО КОДА ---
+
+        // Дополнительная логика для обнаружения обновлений (остается как было)
         reg.addEventListener('updatefound', () => {
           const installingWorker = reg.installing;
           if (installingWorker) {
             installingWorker.addEventListener('statechange', () => {
               if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                // Новый Service Worker установлен и ждет активации
-                // Мы отправим сообщение из theme.js, чтобы активировать его
                 console.log('💡 Новый Service Worker установлен и ждет.');
                 document.dispatchEvent(new CustomEvent('swUpdateReady', { detail: installingWorker }));
               }
@@ -32,7 +38,7 @@
     }
   </script>
   <style>
-    /* ... (стили остаются теми же, если нет пожеланий изменить внешний вид) ... */
+    /* ... (все стили остаются прежними) ... */
     /* Базовые стили для светлой темы по умолчанию */
     :root { /* Переменные для цветов */
       --background-color: #FFFFFF;
@@ -151,7 +157,7 @@
     <img id="theme-icon-sun" src="icon-sun.png" alt="Светлая тема" class="hidden">
   </button>
   <div class="content-area">
-    <h1>Привет, это совершенно новый текст!</h1>
+    <h1>Привет, это совершенно!</h1>
   </div>
 
   <div id="update-notification">
