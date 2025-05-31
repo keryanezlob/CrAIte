@@ -14,11 +14,10 @@
       navigator.serviceWorker.register('sw.js').then(reg => {
         console.log("✅ Service Worker зареєстрований");
 
-        // Запрос на немедленную проверку обновлений при загрузке страницы
         reg.update().then(() => {
             console.log('🔍 Service Worker: Запущена перевірка оновлень.');
         }).catch(error => {
-            console.warn('⚠️ Service Worker: Помилка при запуску перевірки оновлень:', error);
+            console.warn('⚠️ Service Worker: Помилка при запуску перевірок оновлень:', error);
         });
       }).catch(error => {
         console.error("❌ Помилка реєстрації Service Worker:", error);
@@ -93,33 +92,48 @@
       flex-grow: 1;
       display: flex;
       flex-direction: column;
-      /* Отцентрируем по вертикали, но заголовок сместим вверх */
-      justify-content: center; 
+      justify-content: center;
       align-items: center;
-      padding: 20px; /* Уменьшим padding для большего контроля */
+      padding: 20px;
       width: 100%;
       box-sizing: border-box;
-      text-align: center;
+      text-align: center; /* Центрируем содержимое .content-area */
     }
 
     h1 {
-      font-family: 'Montserrat', sans-serif; /* Применяем шрифт Montserrat */
-      font-size: 2.5em; /* Размер шрифта */
-      margin-top: 50px; /* Отступ сверху, чтобы был вверху экрана */
-      margin-bottom: 20px; /* Отступ снизу, если будет еще контент */
-      padding: 15px 30px; /* Внутренние отступы для обводки */
-      border: 2px solid var(--border-color); /* Обводка */
-      border-radius: 25px; /* Закругленные углы */
-      display: inline-block; /* Чтобы рамка обхватывала только текст */
-      color: var(--text-color); /* Цвет текста */
-      background-color: transparent; /* Фон прозрачный */
-      transition: border-color 0.3s ease, color 0.3s ease; /* Плавный переход */
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.5em; /* Размер по умолчанию для больших экранов */
+      margin-top: 50px;
+      margin-bottom: 20px;
+      padding: 15px 30px;
+      border: 2px solid var(--border-color);
+      border-radius: 25px;
+      display: inline-block;
+      color: var(--text-color);
+      background-color: transparent;
+      transition: border-color 0.3s ease, color 0.3s ease;
+      text-align: center; /* Центрируем текст внутри h1 */
+      box-sizing: border-box; /* Гарантируем, что padding включен в общую ширину */
+      max-width: 90%; /* Ограничиваем ширину h1, чтобы не занимал всю ширину на очень широких экранах */
     }
 
     p {
       font-size: 1.2em;
       max-width: 800px;
       line-height: 1.5;
+    }
+
+    /* Медиа-запрос для мобильных устройств (экраны до 768px шириной) */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.5em; /* Меньший размер шрифта для мобильных */
+        padding: 10px 20px; /* Уменьшенные отступы для мобильных */
+        margin-top: 30px; /* Немного уменьшенный отступ сверху */
+        white-space: nowrap; /* Принудительно размещает текст в одну строку */
+        overflow: hidden; /* Скрывает содержимое, выходящее за рамки */
+        text-overflow: ellipsis; /* Добавляет "..." если текст не помещается */
+        max-width: 95%; /* Чуть больше места на мобильных, если необходимо */
+      }
     }
   </style>
 </head>
