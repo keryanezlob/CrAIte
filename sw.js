@@ -1,4 +1,4 @@
-const CACHE_NAME = 'creaite-cache-v1.0.0.3'; // НЕ ЗАБЫВАЕМ ОБНОВЛЯТЬ ХЭШ
+const CACHE_NAME = 'creaite-cache-v1.0.0.4'; // НЕ ЗАБЫВАЕМ ОБНОВЛЯТЬ ХЭШ
 
 self.addEventListener('install', e => {
   console.log('📦 Кэширование основных ресурсов для creAIte...');
