@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const htmlElement = document.documentElement;
     const sunIcon = document.getElementById('theme-icon-sun');
     const moonIcon = document.getElementById('theme-icon-moon');
-    const updateNotification = document.getElementById('update-notification');
+    const updateAppBtn = document.getElementById('update-app-btn'); // Новая кнопка
 
     let newServiceWorker = null; // Для хранения ссылки на новый SW
 
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (metaThemeColor) {
             metaThemeColor.setAttribute('content', theme === 'dark' ? '#000000' : '#FFFFFF');
         }
-        
+
         if (theme === 'dark') {
             if (moonIcon) moonIcon.classList.add('hidden');
             if (sunIcon) sunIcon.classList.remove('hidden');
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (sunIcon) sunIcon.classList.add('hidden');
             if (moonIcon) moonIcon.classList.remove('hidden');
         }
-        
+
         localStorage.setItem('theme', theme);
     }
 
@@ -48,19 +48,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // Событие от index.html, когда новый Service Worker установлен и ждет
     document.addEventListener('swUpdateReady', (e) => {
         newServiceWorker = e.detail; // Сохраняем ссылку на установленный SW
-        if (updateNotification) {
-            updateNotification.classList.add('show'); // Показываем уведомление
+        if (updateAppBtn) {
+            updateAppBtn.classList.add('show'); // Показываем кнопку
         }
     });
 
-    // Обработчик клика по уведомлению об обновлении
-    if (updateNotification) {
-        updateNotification.addEventListener('click', () => {
+    // Обработчик клика по кнопке обновления
+    if (updateAppBtn) {
+        updateAppBtn.addEventListener('click', () => {
             if (newServiceWorker) {
                 // Отправляем сообщение Service Worker'у, чтобы он активировался
                 newServiceWorker.postMessage({ type: 'SKIP_WAITING' });
-                updateNotification.textContent = 'Обновление...';
-                updateNotification.style.backgroundColor = '#FFA500'; // Меняем цвет на оранжевый
+                updateAppBtn.textContent = 'Обновление...';
+                updateAppBtn.style.backgroundColor = '#FFA500'; // Меняем цвет на оранжевый
+                updateAppBtn.disabled = true; // Отключаем кнопку
             }
         });
     }
