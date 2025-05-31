@@ -9,14 +9,30 @@
   <link rel="icon" href="icon-192.png" type="image/png" />
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').then(() => {
+      navigator.serviceWorker.register('sw.js').then(reg => {
         console.log("✅ Service Worker зареєстрований");
+
+        // Дополнительная логика для обнаружения обновлений
+        reg.addEventListener('updatefound', () => {
+          const installingWorker = reg.installing;
+          if (installingWorker) {
+            installingWorker.addEventListener('statechange', () => {
+              if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                // Новый Service Worker установлен и ждет активации
+                // Мы отправим сообщение из theme.js, чтобы активировать его
+                console.log('💡 Новый Service Worker установлен и ждет.');
+                document.dispatchEvent(new CustomEvent('swUpdateReady', { detail: installingWorker }));
+              }
+            });
+          }
+        });
       }).catch(error => {
         console.error("❌ Помилка реєстрації Service Worker:", error);
       });
     }
   </script>
   <style>
+    /* ... (стили остаются теми же, если нет пожеланий изменить внешний вид) ... */
     /* Базовые стили для светлой темы по умолчанию */
     :root { /* Переменные для цветов */
       --background-color: #FFFFFF;
@@ -81,8 +97,6 @@
         display: none;
     }
 
-    /* #clock - удалено, т.к. "creAIte" не обязательно часы, или может быть переосмыслено */
-    /* Если блок с id="clock" будет использоваться для другого контента, его стили нужно будет определить здесь */
     .content-area { /* Новый общий класс для контента */
       flex-grow: 1;
       display: flex;
@@ -105,6 +119,30 @@
       max-width: 800px;
       line-height: 1.5;
     }
+
+    /* Стили для уведомления об обновлении */
+    #update-notification {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #4CAF50; /* Зеленый фон */
+        color: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        display: none; /* Изначально скрыто */
+        z-index: 1000;
+        text-align: center;
+        font-size: 1em;
+        cursor: pointer;
+        transition: opacity 0.3s ease;
+        white-space: nowrap; /* Чтобы текст не переносился */
+    }
+
+    #update-notification.show {
+        display: block;
+    }
   </style>
 </head>
 <body>
@@ -115,6 +153,11 @@
   <div class="content-area">
     <h1>тест</h1>
   </div>
+
+  <div id="update-notification">
+    Доступно обновление! Нажмите, чтобы обновить.
+  </div>
+
   <script src="theme.js"></script>
 </body>
 </html>
