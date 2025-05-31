@@ -7,22 +7,19 @@
   <title>creAIte</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="icon-192.png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js').then(reg => {
         console.log("✅ Service Worker зареєстрований");
 
         // Запрос на немедленную проверку обновлений при загрузке страницы
-        // Это поможет браузеру быстрее обнаружить новый sw.js
         reg.update().then(() => {
-            console.log('🔍 Service Worker: Запущена проверка обновлений.');
+            console.log('🔍 Service Worker: Запущена перевірка оновлень.');
         }).catch(error => {
-            console.warn('⚠️ Service Worker: Ошибка при запуске проверки обновлений:', error);
+            console.warn('⚠️ Service Worker: Помилка при запуску перевірки оновлень:', error);
         });
-
-        // <--- УДАЛЕНА ЛОГИКА ДЛЯ document.dispatchEvent(new CustomEvent('swUpdateReady', ...))
-        // <--- УДАЛЕНА ЛОГИКА ДЛЯ reg.addEventListener('updatefound', ...)
-        // Так как мы больше не показываем уведомление или кнопку обновления
       }).catch(error => {
         console.error("❌ Помилка реєстрації Service Worker:", error);
       });
@@ -30,15 +27,17 @@
   </script>
   <style>
     /* Базовые стили для светлой темы по умолчанию */
-    :root {
+    :root { /* Переменные для цветов */
       --background-color: #FFFFFF;
       --text-color: #000000;
+      --border-color: #000000; /* Цвет обводки по умолчанию (черный для светлой темы) */
     }
 
     /* Стили для темной темы */
     html[data-theme="dark"] {
       --background-color: #000000;
       --text-color: #FFFFFF;
+      --border-color: #FFFFFF; /* Цвет обводки для темной темы (белый) */
     }
 
     html, body {
@@ -48,7 +47,7 @@
       min-height: 100%;
       display: flex;
       flex-direction: column;
-      font-family: sans-serif;
+      font-family: sans-serif; /* Fallback-шрифт */
       font-size: 16px;
 
       background-color: var(--background-color);
@@ -94,17 +93,27 @@
       flex-grow: 1;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      /* Отцентрируем по вертикали, но заголовок сместим вверх */
+      justify-content: center; 
       align-items: center;
-      padding: 60px 20px 20px 20px;
+      padding: 20px; /* Уменьшим padding для большего контроля */
       width: 100%;
       box-sizing: border-box;
       text-align: center;
     }
 
     h1 {
-      font-size: 2.5em;
-      margin-bottom: 20px;
+      font-family: 'Montserrat', sans-serif; /* Применяем шрифт Montserrat */
+      font-size: 2.5em; /* Размер шрифта */
+      margin-top: 50px; /* Отступ сверху, чтобы был вверху экрана */
+      margin-bottom: 20px; /* Отступ снизу, если будет еще контент */
+      padding: 15px 30px; /* Внутренние отступы для обводки */
+      border: 2px solid var(--border-color); /* Обводка */
+      border-radius: 25px; /* Закругленные углы */
+      display: inline-block; /* Чтобы рамка обхватывала только текст */
+      color: var(--text-color); /* Цвет текста */
+      background-color: transparent; /* Фон прозрачный */
+      transition: border-color 0.3s ease, color 0.3s ease; /* Плавный переход */
     }
 
     p {
@@ -112,8 +121,6 @@
       max-width: 800px;
       line-height: 1.5;
     }
-
-    /* <--- Стили для кнопки обновления (#update-app-btn) УДАЛЕНЫ */
   </style>
 </head>
 <body>
@@ -122,8 +129,8 @@
     <img id="theme-icon-sun" src="icon-sun.png" alt="Светлая тема" class="hidden">
   </button>
   <div class="content-area">
-    <h1>Привіт, це абсолютно новий текст!</h1>
-    </div>
+    <h1>Майбутнє починається з creAIte</h1>
+  </div>
 
   <script src="theme.js"></script>
 </body>
