@@ -92,18 +92,19 @@
       flex-grow: 1;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start; /* ИЗМЕНЕНО: теперь прижимаем к верху */
       align-items: center;
-      padding: 20px;
+      padding: 20px; /* Горизонтальные отступы по умолчанию */
+      padding-top: 80px; /* ДОБАВЛЕНО: Отступ сверху, чтобы заголовок не наезжал на кнопку темы */
       width: 100%;
       box-sizing: border-box;
-      text-align: center; /* Центрируем содержимое .content-area */
+      text-align: center;
     }
 
     h1 {
       font-family: 'Montserrat', sans-serif;
       font-size: 2.5em; /* Размер по умолчанию для больших экранов */
-      margin-top: 50px;
+      margin-top: 0; /* ИЗМЕНЕНО: Убираем верхний отступ у самого h1 */
       margin-bottom: 20px;
       padding: 15px 30px;
       border: 2px solid var(--border-color);
@@ -112,9 +113,9 @@
       color: var(--text-color);
       background-color: transparent;
       transition: border-color 0.3s ease, color 0.3s ease;
-      text-align: center; /* Центрируем текст внутри h1 */
-      box-sizing: border-box; /* Гарантируем, что padding включен в общую ширину */
-      max-width: 90%; /* Ограничиваем ширину h1, чтобы не занимал всю ширину на очень широких экранах */
+      text-align: center;
+      box-sizing: border-box;
+      max-width: 90%;
     }
 
     p {
@@ -125,14 +126,18 @@
 
     /* Медиа-запрос для мобильных устройств (экраны до 768px шириной) */
     @media (max-width: 768px) {
+      .content-area {
+        padding: 10px; /* Уменьшаем горизонтальные отступы контейнера на мобильных */
+        padding-top: 60px; /* ДОБАВЛЕНО: Отступ сверху для мобильных, чтобы очистить кнопку */
+      }
       h1 {
-        font-size: 1.5em; /* Меньший размер шрифта для мобильных */
-        padding: 10px 20px; /* Уменьшенные отступы для мобильных */
-        margin-top: 30px; /* Немного уменьшенный отступ сверху */
-        white-space: nowrap; /* Принудительно размещает текст в одну строку */
-        overflow: hidden; /* Скрывает содержимое, выходящее за рамки */
-        text-overflow: ellipsis; /* Добавляет "..." если текст не помещается */
-        max-width: 95%; /* Чуть больше места на мобильных, если необходимо */
+        font-size: 1.2em;
+        padding: 8px 15px;
+        margin-top: 0; /* ИЗМЕНЕНО: Убираем верхний отступ у h1 на мобильных */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: calc(100% - 20px);
       }
     }
   </style>
