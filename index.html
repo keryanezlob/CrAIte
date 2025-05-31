@@ -12,20 +12,14 @@
       navigator.serviceWorker.register('sw.js').then(reg => {
         console.log("✅ Service Worker зареєстрований");
 
-        // Запрос на немедленную проверку обновлений при загрузке страницы
-        reg.update().then(() => {
-            console.log('🔍 Service Worker: Запущена проверка обновлений.');
-        }).catch(error => {
-            console.warn('⚠️ Service Worker: Ошибка при запуске проверки обновлений:', error);
-        });
-
         // Проверяем, есть ли уже ожидающий Service Worker при загрузке страницы
+        // Если есть, это значит, что обновление уже загружено и ждет применения
         if (reg.waiting) {
             console.log('💡 Service Worker: Найдена ожидающая версия при загрузке страницы.');
             document.dispatchEvent(new CustomEvent('swUpdateReady', { detail: reg.waiting }));
         }
 
-        // Логика для initial updatefound during current session
+        // Логика для обнаружения обновлений во время текущей сессии
         reg.addEventListener('updatefound', () => {
           const installingWorker = reg.installing;
           if (installingWorker) {
@@ -43,6 +37,7 @@
     }
   </script>
   <style>
+    /* ... (стили для темы и общей верстки остаются прежними) ... */
     /* Базовые стили для светлой темы по умолчанию */
     :root { /* Переменные для цветов */
       --background-color: #FFFFFF;
@@ -59,7 +54,7 @@
       margin: 0;
       padding: 0;
       width: 100%;
-      min-height: 100%; /* Изменено на min-height для прокрутки */
+      min-height: 100%;
       display: flex;
       flex-direction: column;
       font-family: sans-serif;
@@ -129,24 +124,29 @@
 
     /* Стили для кнопки обновления */
     #update-app-btn {
-        margin-top: 20px; /* Отступ от текста */
+        margin-top: 20px;
         padding: 15px 30px;
         font-size: 1.1em;
-        background-color: #007bff; /* Синяя кнопка */
+        background-color: #007bff; /* Синяя кнопка по умолчанию */
         color: white;
         border: none;
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.3s ease;
-        display: none; /* Изначально скрыта */
-    }
-
-    #update-app-btn.show {
-        display: block;
+        /* display: block; - кнопка всегда видна */
     }
 
     #update-app-btn:hover {
         background-color: #0056b3;
+    }
+
+    /* Новый класс для кнопки, когда есть обновление */
+    #update-app-btn.update-available {
+        background-color: #28a745; /* Зеленый цвет для "доступно обновление" */
+    }
+
+    #update-app-btn.update-available:hover {
+        background-color: #218838;
     }
   </style>
 </head>
@@ -156,8 +156,8 @@
     <img id="theme-icon-sun" src="icon-sun.png" alt="Светлая тема" class="hidden">
   </button>
   <div class="content-area">
-    <h1>ЭТО бета!</h1>
-    <button id="update-app-btn">Доступно обновление! Нажмите, чтобы обновить.</button>
+    <h1>Привіт, це абсолютно новий текст!</h1>
+    <button id="update-app-btn">Перевірити оновлення</button>
   </div>
 
   <script src="theme.js"></script>
