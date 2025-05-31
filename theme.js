@@ -1,8 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     const themeToggleBtn = document.getElementById('theme-toggle');
     const htmlElement = document.documentElement;
-    const sunIcon = document.getElementById('theme-icon-sun'); // Получаем иконку солнца
-    const moonIcon = document.getElementById('theme-icon-moon'); // Получаем иконку луны
+    const sunIcon = document.getElementById('theme-icon-sun');
+    const moonIcon = document.getElementById('theme-icon-moon');
+    const updateNotification = document.getElementById('update-notification');
+
+    let newServiceWorker = null; // Для хранения ссылки на новый SW
 
     // Функция для применения темы
     function applyTheme(theme) {
@@ -12,18 +15,15 @@ document.addEventListener('DOMContentLoaded', () => {
             metaThemeColor.setAttribute('content', theme === 'dark' ? '#000000' : '#FFFFFF');
         }
         
-        // Переключаем видимость иконок:
-        // Если тема "dark" (черный фон), показываем солнце (чтобы переключиться на светлую).
-        // Если тема "light" (белый фон), показываем луну (чтобы переключиться на темную).
         if (theme === 'dark') {
-            if (moonIcon) moonIcon.classList.add('hidden'); // Скрываем луну
-            if (sunIcon) sunIcon.classList.remove('hidden'); // Показываем солнце
+            if (moonIcon) moonIcon.classList.add('hidden');
+            if (sunIcon) sunIcon.classList.remove('hidden');
         } else { // light theme
-            if (sunIcon) sunIcon.classList.add('hidden'); // Скрываем солнце
-            if (moonIcon) moonIcon.classList.remove('hidden'); // Показываем луну
+            if (sunIcon) sunIcon.classList.add('hidden');
+            if (moonIcon) moonIcon.classList.remove('hidden');
         }
         
-        localStorage.setItem('theme', theme); // Сохраняем выбор пользователя
+        localStorage.setItem('theme', theme);
     }
 
     // Проверяем сохраненную тему при загрузке страницы
@@ -31,15 +31,46 @@ document.addEventListener('DOMContentLoaded', () => {
     if (savedTheme) {
         applyTheme(savedTheme);
     } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        applyTheme('dark'); // Если системная тема темная, применяем темную тему
+        applyTheme('dark');
     } else {
-        applyTheme('light'); // Иначе по умолчанию светлая тема
+        applyTheme('light');
     }
 
-    // Обработчик клика по кнопке
+    // Обработчик клика по кнопке переключения темы
     themeToggleBtn.addEventListener('click', () => {
         const currentTheme = htmlElement.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         applyTheme(newTheme);
+    });
+
+    // --- Логика обновления Service Worker ---
+
+    // Событие от index.html, когда новый Service Worker установлен и ждет
+    document.addEventListener('swUpdateReady', (e) => {
+        newServiceWorker = e.detail; // Сохраняем ссылку на установленный SW
+        if (updateNotification) {
+            updateNotification.classList.add('show'); // Показываем уведомление
+        }
+    });
+
+    // Обработчик клика по уведомлению об обновлении
+    if (updateNotification) {
+        updateNotification.addEventListener('click', () => {
+            if (newServiceWorker) {
+                // Отправляем сообщение Service Worker'у, чтобы он активировался
+                newServiceWorker.postMessage({ type: 'SKIP_WAITING' });
+                updateNotification.textContent = 'Обновление...';
+                updateNotification.style.backgroundColor = '#FFA500'; // Меняем цвет на оранжевый
+            }
+        });
+    }
+
+    // Слушаем сообщения от Service Worker'а
+    navigator.serviceWorker.addEventListener('message', (event) => {
+        if (event.data && event.data.type === 'UPDATE_ACTIVATED') {
+            // Service Worker сообщил, что он активировался
+            console.log('✅ Service Worker активирован, перезагружаем страницу...');
+            window.location.reload(); // Перезагружаем страницу, чтобы применить изменения
+        }
     });
 });
