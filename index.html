@@ -92,10 +92,10 @@
       flex-grow: 1;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start; /* ИЗМЕНЕНО: теперь прижимаем к верху */
+      justify-content: flex-start; /* Прижимаем содержимое к верху */
       align-items: center;
       padding: 20px; /* Горизонтальные отступы по умолчанию */
-      padding-top: 80px; /* ДОБАВЛЕНО: Отступ сверху, чтобы заголовок не наезжал на кнопку темы */
+      padding-top: 20px; /* ИЗМЕНЕНО: Минимальный отступ сверху, чтобы заголовок был над кнопкой темы */
       width: 100%;
       box-sizing: border-box;
       text-align: center;
@@ -104,7 +104,7 @@
     h1 {
       font-family: 'Montserrat', sans-serif;
       font-size: 2.5em; /* Размер по умолчанию для больших экранов */
-      margin-top: 0; /* ИЗМЕНЕНО: Убираем верхний отступ у самого h1 */
+      margin-top: 0; /* Убираем верхний отступ у самого h1 */
       margin-bottom: 20px;
       padding: 15px 30px;
       border: 2px solid var(--border-color);
@@ -128,12 +128,12 @@
     @media (max-width: 768px) {
       .content-area {
         padding: 10px; /* Уменьшаем горизонтальные отступы контейнера на мобильных */
-        padding-top: 60px; /* ДОБАВЛЕНО: Отступ сверху для мобильных, чтобы очистить кнопку */
+        padding-top: 10px; /* ИЗМЕНЕНО: Минимальный отступ сверху для мобильных */
       }
       h1 {
         font-size: 1.2em;
         padding: 8px 15px;
-        margin-top: 0; /* ИЗМЕНЕНО: Убираем верхний отступ у h1 на мобильных */
+        margin-top: 0; /* Убираем верхний отступ у h1 на мобильных */
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
